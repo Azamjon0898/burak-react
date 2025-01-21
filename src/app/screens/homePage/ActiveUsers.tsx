@@ -12,7 +12,7 @@ const activeUsers = [
   { memberNick: "Nusret", memberImage: "/img/nusret.webp" },
 ];
 
-export default function ActiveUsers() {
+export default function ActiveUsers() { 
   return (
     <div className="active-users-frame">
       <Container>
