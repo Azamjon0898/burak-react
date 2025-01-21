@@ -11,14 +11,14 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import TextField from "@mui/material/TextField";
 
 const products = [
-  { productName: "Cutlet", imagePath: "img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "img/kebab.webp" },
-  { productName: "Lavash", imagePath: "img/lavash.webp" },
-  { productName: "Lavash", imagePath: "img/lavash.webp" },
-  { productName: "Cutlet", imagePath: "img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "img/kebab.webp" },
+  { id: 1, productName: "Cutlet", imagePath: "img/cutlet.webp" },
+  { id: 2, productName: "Kebab", imagePath: "img/kebab-fresh.webp" },
+  { id: 3, productName: "Kebab", imagePath: "img/kebab.webp" },
+  { id: 4, productName: "Lavash", imagePath: "img/lavash.webp" },
+  { id: 5, productName: "Lavash", imagePath: "img/lavash.webp" },
+  { id: 6, productName: "Cutlet", imagePath: "img/cutlet.webp" },
+  { id: 7, productName: "Kebab", imagePath: "img/kebab-fresh.webp" },
+  { id: 8, productName: "Kebab", imagePath: "img/kebab.webp" },
 ];
 
 export default function Products() {
@@ -34,7 +34,6 @@ export default function Products() {
                 label="Type here"
                 variant="outlined"
               />
-
               <Button
                 variant="contained"
                 className="searchButton"
@@ -61,7 +60,7 @@ export default function Products() {
           </Stack>
 
           <Stack className="list-category-section">
-            <Stack className="product-category ">
+            <Stack className="product-category">
               <Button variant="contained" color="primary" className="type">
                 Dish
               </Button>
@@ -80,41 +79,35 @@ export default function Products() {
             </Stack>
 
             <Stack className="product-wrapper">
-              {products.length !== 0 ? (
-                products.map((product, index) => {
-                  return (
-                    <Stack key={index} className="product-card">
-                      <Stack
-                        className="product-img"
-                        sx={{ backgroundImage: `url(${product.imagePath})` }}
-                      >
-                        <div className="products-sale">Normal size</div>
-                        <Button className="shop-btn">
-                          <img
-                            src="/icons/shopping-cart.svg"
-                            style={{ display: "flex" }}
-                            alt=""
-                          />
-                        </Button>
-                        <Button className="view-btn" sx={{ right: "36px" }}>
-                          <Badge badgeContent={20} color="secondary">
-                            <RemoveRedEyeIcon
-                              sx={{ color: 20 ? "gray" : "white" }}
-                            />
-                          </Badge>
-                        </Button>
-                      </Stack>
-                      <Box className="product-desc">
-                        <span className="product-title">
-                          {product.productName}
-                        </span>
-                        <div className="product-desc">
-                          <MonetizationOnIcon /> {12}
-                        </div>
-                      </Box>
+              {products.length ? (
+                products.map((product) => (
+                  <Stack key={product.id} className="product-card">
+                    <Stack
+                      className="product-img"
+                      sx={{ backgroundImage: `url(${product.imagePath})` }}
+                    >
+                      <div className="products-sale">Normal size</div>
+                      <Button className="shop-btn">
+                        <img
+                          src="/icons/shopping-cart.svg"
+                          style={{ display: "flex" }}
+                          alt=""
+                        />
+                      </Button>
+                      <Button className="view-btn" sx={{ right: "36px" }}>
+                        <Badge badgeContent={20} color="secondary">
+                          <RemoveRedEyeIcon sx={{ color: "gray" }} />
+                        </Badge>
+                      </Button>
                     </Stack>
-                  );
-                })
+                    <Box className="product-desc">
+                      <span className="product-title">{product.productName}</span>
+                      <div className="product-desc">
+                        <MonetizationOnIcon /> {12}
+                      </div>
+                    </Box>
+                  </Stack>
+                ))
               ) : (
                 <Box className="no-data">Products are not available</Box>
               )}
