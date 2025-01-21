@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Advertisement() {
-  return (
+  return ( 
     <div className="ads-restaurant-frame">
       <video
         className="ads-video"
