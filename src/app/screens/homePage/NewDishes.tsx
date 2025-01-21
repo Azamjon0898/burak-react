@@ -17,7 +17,7 @@ const newDishes = [
 
 export default function NewDishes() {
   return (
-    <div className="new-products-frame">
+    <div className="new-products-frame"> 
       <Container>
         <Stack className="main">
           <Box className="category-title">Fresh Menu</Box>

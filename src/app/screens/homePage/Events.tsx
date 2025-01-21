@@ -67,7 +67,7 @@ export default function Events() {
                         </div>
                       </div>
                     </Box>
-                  </Box>
+                  </Box> 
                 </Box>
               </SwiperSlide>
             );
