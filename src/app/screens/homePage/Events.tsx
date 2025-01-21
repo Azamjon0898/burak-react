@@ -1,14 +1,10 @@
 import React from "react";
 import { Box, Stack } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import { plans } from "../../../lib/data/plans";
 
-// Swiper CSS fayllarini import qilish
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
+SwiperCore.use([Autoplay, Navigation, Pagination]);
 
 export default function Events() {
   return (
@@ -20,7 +16,6 @@ export default function Events() {
 
         <Swiper
           className={"events-info swiper-wrapper"}
-          modules={[Autoplay, Navigation, Pagination]}
           slidesPerView={"auto"}
           centeredSlides={true}
           spaceBetween={30}
@@ -41,7 +36,7 @@ export default function Events() {
             return (
               <SwiperSlide key={number} className={"events-info-frame"}>
                 <div className={"events-img"}>
-                  <img src={value.img} className={"events-img"} alt={value.title} />
+                  <img src={value.img} className={"events-img"} />
                 </div>
                 <Box className={"events-desc"}>
                   <Box className={"events-bott"}>
@@ -49,25 +44,25 @@ export default function Events() {
                       <div className={"event-title-speaker"}>
                         <strong>{value.title}</strong>
                         <div className={"event-organizator"}>
-                          <img src={"/icons/speaker.svg"} alt="Speaker icon" />
+                          <img src={"/icons/speaker.svg"} />
                           <p className={"spec-text-author"}>{value.author}</p>
                         </div>
                       </div>
 
-                      <p className={"text-desc"}>{value.desc}</p>
+                      <p className={"text-desc"}> {value.desc} </p>
 
                       <div className={"bott-info"}>
                         <div className={"bott-info-main"}>
-                          <img src={"/icons/calendar.svg"} alt="Calendar icon" />
+                          <img src={"/icons/calendar.svg"} />
                           {value.date}
                         </div>
                         <div className={"bott-info-main"}>
-                          <img src={"/icons/location.svg"} alt="Location icon" />
+                          <img src={"/icons/location.svg"} />
                           {value.location}
                         </div>
                       </div>
                     </Box>
-                  </Box> 
+                  </Box>
                 </Box>
               </SwiperSlide>
             );
@@ -77,14 +72,12 @@ export default function Events() {
           <img
             src={"/icons/arrow-right.svg"}
             className={"swiper-button-prev"}
-            alt="Previous"
           />
           <div className={"dot-frame-pagination swiper-pagination"}></div>
           <img
             src={"/icons/arrow-right.svg"}
             className={"swiper-button-next"}
             style={{ transform: "rotate(-180deg)" }}
-            alt="Next"
           />
         </Box>
       </Stack>

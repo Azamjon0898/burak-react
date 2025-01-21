@@ -31,4 +31,4 @@ export const plans = [
 		location: 'Europe, France',
 		img: '/img/food-city.webp',
 	},
-];
+]; 
