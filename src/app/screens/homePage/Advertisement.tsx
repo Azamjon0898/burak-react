@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Advertisement() {
-  return ( 
+  return (
     <div className="ads-restaurant-frame">
       <video
         className="ads-video"
@@ -11,7 +11,7 @@ export default function Advertisement() {
         playsInline
         data-video-media=""
       >
-        <source type="video/mp4" src="video/burak-ads.mp4"></source>
+        <source type="video/mp4" src="video/burak-ads.mp4" />
       </video>
     </div>
   );
