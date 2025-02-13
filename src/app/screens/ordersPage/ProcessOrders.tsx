@@ -2,12 +2,13 @@ import React from "react";
 import { Stack, Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import TabPanel from "@mui/lab/TabPanel";
+import moment from "moment";
 
-export default function PausedOrders() {
+export default function ProcessOrders() {
   const orders = [1, 2];
 
   return (
-    <TabPanel value="1">
+    <TabPanel value="2">
       <Stack>
         {/* number of orders */}
         {orders.map((ele, index) => {
@@ -45,17 +46,11 @@ export default function PausedOrders() {
                   <p>Total</p>
                   <p>$65</p>
                 </Box>
-
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className="cancel-button"
-                >
-                  Cancel
-                </Button>
-
-                <Button variant="contained" className="pay-button">
-                  Payment
+                <p className="data-compl">
+                  {moment().format("YY-MM-DD HH:mm")}
+                </p>
+                <Button variant="contained" className="verify-button">
+                  Verify to fulfill
                 </Button>
               </Box>
             </Box>

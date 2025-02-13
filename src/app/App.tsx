@@ -1,27 +1,30 @@
-import React from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
-import  ProductsPage  from './screens/productsPage';
-import  OrdersPage  from './screens/ordersPage';
-import  UserPage  from './screens/userPage';
-import  HomePage  from './screens/homePage';
-import  HelpPage  from './screens/helpPage';
-import  OtherNavbar  from './components/headers/OtherNavbar';
-import  HomeNavbar  from './components/headers/HomeNavbar';
-import Footer  from './components/footers';
-import '../css/app.css';
-import '../css/navbar.css'
-import '../css/footer.css'
-import Test from './screens/Test';
+import React from "react";
+import { Switch, Route, useLocation } from "react-router-dom";
+import HomePage from "./screens/homePage";
+import ProductsPage from "./screens/productsPage/index";
+import OrdersPage from "./screens/ordersPage";
+import UserPage from "./screens/userPage";
+import HelpPage from "./screens/helpPage";
+import HomeNavbar from "./components/headers/HomeNavbar";
+import OtherNavbar from "./components/headers/OtherNavbar";
+import Footer from "./components/footer";
+import "../css/app.css";
+import "../css/navbar.css";
+import "../css/footer.css";
 
+import Test from "./screens/Test";
 
 function App() {
-    const location = useLocation();
+  const location = useLocation();
 
-    return (
-      <>
+  return (
+    <>
+      {location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />}
 
-      {location.pathname === "/" ? <HomeNavbar/> : <OtherNavbar/>}
       <Switch>
+        <Route path="/help">
+          <HelpPage />
+        </Route>
         <Route path="/products">
           <ProductsPage />
         </Route>
@@ -29,21 +32,17 @@ function App() {
           <OrdersPage />
         </Route>
         <Route path="/member-page">
-          <UserPage/>
-        </Route>
-        <Route path="/help">
-          <HelpPage/>
+          <UserPage />
         </Route>
         <Route path="/">
           <HomePage />
+          {/* <Test /> */}
         </Route>
       </Switch>
-      <Footer/>
-    </>
-    
-    );
-    
 
+      <Footer />
+    </>
+  );
 }
 
 export default App;
