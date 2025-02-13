@@ -17,7 +17,7 @@ import { Product } from "../../../lib/types/product";
 const popularDishesRetriever = createSelector(
   retrievePopularDishes,
   (popularDishes) => ({ popularDishes })
-);
+); 
 
 export default function PopularDishes() {
   const { popularDishes } = useSelector(popularDishesRetriever);
