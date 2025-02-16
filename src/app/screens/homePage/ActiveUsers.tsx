@@ -9,14 +9,7 @@ import { createSelector } from "reselect";
 import MemberService from "../../services/MemberService.ts";
 import { Member } from "../../../lib/types/member";
 import { useSelector } from "react-redux";
-import { serverApi } from "../../../lib/config"; 
-
-// const activeUsers = [
-//   { memberNick: "Martin", memberImage: "/img/martin.webp" },
-//   { memberNick: "Martin", memberImage: "/img/martin.webp" },
-//   { memberNick: "Martin", memberImage: "/img/martin.webp" },
-//   { memberNick: "Martin", memberImage: "/img/martin.webp" },
-// ];
+import { serverApi } from "../../../lib/config";
 
 const topUsersRetriever = createSelector(retrieveTopUsers, (topUsers) => ({
   topUsers,

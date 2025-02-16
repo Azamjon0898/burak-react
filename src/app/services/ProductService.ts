@@ -22,7 +22,7 @@ class ProductService {
       console.log("Error, getProducts", err);
       throw err;
     }
-  } 
+  }
 
   public async getProduct(productId: string): Promise<Product> {
     try {

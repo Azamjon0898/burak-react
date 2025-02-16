@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import ProductsPage from "./screens/productsPage/index";
@@ -11,22 +11,45 @@ import Footer from "./components/footer";
 import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
-
-import Test from "./screens/Test";
+import { CartItem } from "../lib/types/search";
+import useBasket from "./hooks/useBasket";
 
 function App() {
   const location = useLocation();
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
 
   return (
     <>
-      {location.pathname === "/" ? <HomeNavbar /> : <OtherNavbar />}
+      {location.pathname === "/" ? (
+        <HomeNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      ) : (
+        <OtherNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      )}
 
       <Switch>
         <Route path="/help">
           <HelpPage />
         </Route>
         <Route path="/products">
-          <ProductsPage />
+          <ProductsPage
+            cartItems={cartItems}
+            onAdd={onAdd}
+            onRemove={onRemove}
+            onDelete={onDelete}
+            onDeleteAll={onDeleteAll}
+          />
         </Route>
         <Route path="/orders">
           <OrdersPage />
@@ -36,7 +59,6 @@ function App() {
         </Route>
         <Route path="/">
           <HomePage />
-          {/* <Test /> */}
         </Route>
       </Switch>
 
