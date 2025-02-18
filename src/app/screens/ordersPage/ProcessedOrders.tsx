@@ -2,75 +2,53 @@ import React from "react";
 import { Box, Stack } from "@mui/material";
 import Button from "@mui/material/Button";
 import TabPanel from "@mui/lab/TabPanel";
-
+import moment from "moment";
 import { createSelector } from '@reduxjs/toolkit';
-import { retrievePausedOrders } from "./selector";
+
 import { useSelector } from "react-redux";
 import { Order, OrderItem, OrderUpdateInput } from "../../../lib/types/order";
 import { Product } from "../../../lib/types/product";
 import { Messages, serverApi } from "../../../lib/config";
+import { retrieveProcessOrders } from "./selector";
 import { useGlobals } from "../../hooks/useGlobals";
-import { OrderStatus } from "../../../lib/enums/order-enum";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { T } from "../../../lib/types/common";
+import { OrderStatus } from "../../../lib/enums/order-enum";
 import OrderService from "../../services/OrderService";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
 
 /** REDUX SLICE & SELECTOR */
-const pausedOrdersRetriever = createSelector(retrievePausedOrders,
-  (pausedOrders) => ({ pausedOrders })
+const processOrdersRetriever = createSelector(
+  retrieveProcessOrders,
+  (processOrders) => ({ processOrders })
 );
-interface PausedOrderProps {
+interface ProcessOrderProps {
   setValue: (input: string) => void
 }
 
-export default function PausedOrders(props: PausedOrderProps) {
+export default function ProcessOrders(props: ProcessOrderProps) {
   const {setValue} = props;
   const {authMember, setOrderBuilder} = useGlobals();
-  const {pausedOrders} = useSelector(pausedOrdersRetriever)
+  const {processOrders} = useSelector(processOrdersRetriever)
+/** HANDLERS **/
 
-// HANDLERS
-
-const deleteOrderHandler = async (e: T) => {
+const finishOrderHandler = async (e: T) => {
   try {
       if (!authMember) throw new Error(Messages.error2);
-      const orderId = e.target.value;
-      const input: OrderUpdateInput = {
-          orderId: orderId,
-          orderStatus: OrderStatus.DELETE,
-      };
-
-      const confirmation = window.confirm("Do you want to delete the order?");
-
-      if (confirmation) {
-          const order = new OrderService();
-          await order.updateOrder(input);
-          setOrderBuilder(new Date());
-      }
-  } catch (err) {
-      console.log(err);
-      sweetErrorHandling(err).then();
-  }
-};
-
-const processOrderHandler = async (e: T) => {
-  try {
-      if (!authMember) throw new Error(Messages.error2);
-
-      // PAYMENT PROCESS
 
       const orderId = e.target.value;
       const input: OrderUpdateInput = {
           orderId: orderId,
-          orderStatus: OrderStatus.PROCESS,
+          orderStatus: OrderStatus.FINISH,
       };
 
       const confirmation = window.confirm(
-          "Do you want to proceed with payment?"
+          "Have you received your order?"
       );
+
       if (confirmation) {
           const order = new OrderService();
           await order.updateOrder(input);
-          setValue("2");
+          setValue("3");
           setOrderBuilder(new Date());
       }
   } catch (err) {
@@ -82,13 +60,13 @@ const processOrderHandler = async (e: T) => {
 
 
   return (
-    <TabPanel value="1">
+    <TabPanel value={"2"}>
       <Stack>
-        {pausedOrders.map((order: Order) => {
+        {processOrders?.map((order: Order) => {
           return (
             <Box key={order._id} className={"order-main-box"}>
               <Box className={"order-box-scroll"}>
-                {order?.orderItems?.map((item: OrderItem) => {
+              {order?.orderItems?.map((item: OrderItem) => {
                   const product: Product | undefined = order.productData.find(
                     (ele: Product) => ele._id === item.productId
                   );
@@ -103,70 +81,50 @@ const processOrderHandler = async (e: T) => {
                     <Box key={item._id} className={"orders-name-price"}>
                       <img src={imagePath} className={"order-dish-img"} />
                       <p className={"title-dish"}>{product.productName}</p>
-
                       <Box className={"price-box"}>
                         <p>${item.itemPrice}</p>
-
-                        <img src="/icons/close.svg" />
+                        <img src={"/icons/close.svg"} />
                         <p>{item.itemQuantity}</p>
-
-                        <img src="/icons/pause.svg" />
-
-                        <p style={{ marginLeft: "15px" }}>
-                          ${item.itemQuantity * item.itemPrice}
-                        </p>
+                        <img src={"/icons/pause.svg"} />
+                        <p style={{ marginLeft: "15px" }}>${item.itemQuantity * item.itemPrice}</p>
                       </Box>
                     </Box>
                   );
                 })}
               </Box>
-              
-              <Box className="total-price-box">
-                <Box className="box-total">
+
+              <Box className={"total-price-box"}>
+                <Box className={"box-total"}>
                   <p>Product price</p>
                   <p>${order.orderTotal + order.orderDelivery}</p>
-                  <img src="/icons/plus.svg" style={{ marginLeft: "20px" }} />
-                  <p>Delivery cost</p>
+                  <img src={"/icons/plus.svg"} style={{ marginLeft: "20px" }} />
+                  <p>delivery cost</p>
                   <p>${order.orderDelivery}</p>
-                  <img src="/icons/pause.svg" style={{ marginLeft: "20px" }} />
+                  <img src={"/icons/pause.svg"} style={{ marginLeft: "20px" }} />
                   <p>Total</p>
                   <p>${order.orderTotal}</p>
                 </Box>
+                <p className={"data-compl"}>
+                  {moment().format("YY-MM-DD HH:mm")}
+                </p>
                 <Button 
                 value={order._id}
                 variant="contained" 
-                color="secondary" 
-                className="cancel-button"
-                onClick={deleteOrderHandler}>
-                
-                  Cancel
-                </Button>
-                <Button 
-                value={order._id}
-                variant="contained" 
-                className="pay-button"
-                onClick={processOrderHandler}>
-                  Payment
+                className={"verify-button"}
+                onClick={finishOrderHandler}>
+                  Verify to Fulfil
                 </Button>
               </Box>
             </Box>
           );
         })}
-        
-        {!pausedOrders || (pausedOrders.length === 0 && (
-          <Box
-            display={"flex"}
-            flexDirection={"row"}
-            justifyContent={"center"}
-          >
-            <img
-              src="/icons/noimage-list.svg"
-              style={{ width: 300, height: 300 }}
-            />
+
+        {!processOrders || (processOrders.length === 0 &&  (
+          <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
+            <img src={"/icons/noimage-list.svg"} style={{ width: 300, height: 300 }} />
           </Box>
         ))}
       </Stack>
     </TabPanel>
   );
 }
-

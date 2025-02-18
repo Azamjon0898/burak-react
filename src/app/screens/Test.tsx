@@ -4,6 +4,7 @@ import React, { Component } from "react";
 class Test extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       brand: "Ford",
       model: "Mustang",
@@ -13,36 +14,36 @@ class Test extends Component {
   }
 
   changeDetail = () => {
-    // this.setState({ color: "blue", brand: "Tesla", year: 2023 });
-    this.state.color = "blue";
-    console.log("jafhakjh");
+    this.setState({
+      color: "blue",
+      brand: "Tesla",
+      model: "Model S",
+      year: 2023,
+    });
   };
 
-  componentDidMount(): void {
+  componentDidMount() {
     console.log("componentDidMount");
-    // runs after first render
+    // runs after first render => RETRIEVE DATA FROM BACKEND SERVER
   }
 
-  componentWillUnmount(): void {
+  componentWillUnmount() {
     console.log("componentWillUnmount");
-    // runs before component is removed
+    // runs before component unmount
   }
 
-  componentDidUpdate(): void {
-    console.log("componentDidUpdate");
-    // runs after state is updated
-  }
+  componentDidUpdate() {}
 
   render() {
     return (
       <div>
         <h1>My {this.state.brand}</h1>
         <p>
-          Color: {this.state.color} - Model: {this.state.model}
-          from {this.state.year}.
+          Color: {this.state.color} Model: {this.state.model} from{" "}
+          {this.state.year}.
         </p>
         <button type="button" onClick={this.changeDetail}>
-          Change color
+          Change Detail
         </button>
       </div>
     );

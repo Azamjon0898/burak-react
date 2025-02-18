@@ -23,8 +23,7 @@ const productsPageSlice = createSlice({
   },
 });
 
-export const { setChosenProduct, setProducts, setRestaurant } =
-  productsPageSlice.actions;
+export const { setRestaurant, setChosenProduct, setProducts } = productsPageSlice.actions;
 
-const ProductPageReducer = productsPageSlice.reducer;
-export default ProductPageReducer;
+const ProductsPageReducer = productsPageSlice.reducer;
+export default ProductsPageReducer;
