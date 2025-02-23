@@ -1,81 +1,98 @@
-import React from 'react';
-import { Box, Stack } from '@mui/material';
-import TabPanel from '@mui/lab/TabPanel';
-import { useSelector } from "react-redux";
-import { Order, OrderItem } from "../../../lib/types/order";
-import { Product } from "../../../lib/types/product";
-import { serverApi } from "../../../lib/config";
-import { retrieveFinishedOrders, retrieveProcessOrders } from "./selector";
-import { createSelector } from '@reduxjs/toolkit';
+import React from "react";
+import { Stack, Box } from "@mui/material";
+import TabPanel from "@mui/lab/TabPanel";
 
-/** REDUX SLICE & SELECTOR */
+import { useSelector } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrieverFinishedOrders } from "./selector";
+import { Order, OrderItem } from "../../../lib/types/order";
+import { serverApi } from "../../../lib/config";
+import { Product } from "../../../lib/types/product";
+
+/** Redux  */
 const finishedOrdersRetriever = createSelector(
-  retrieveFinishedOrders,
+  retrieverFinishedOrders,
   (finishedOrders) => ({ finishedOrders })
 );
 
 export default function FinishedOrders() {
-  const {finishedOrders} = useSelector(finishedOrdersRetriever)
+  const { finishedOrders } = useSelector(finishedOrdersRetriever);
+
   return (
     <TabPanel value="3">
       <Stack>
-        {finishedOrders?.map((order: Order) => { 
+        {/* for each order in finishedOrders */}
+        {finishedOrders.map((order: Order) => {
           return (
             <Box key={order._id} className="order-main-box">
               <Box className="order-box-scroll">
-              {order?.orderItems?.map((item: OrderItem) => {
-                  const product: Product | undefined = order.productData.find(
-                    (ele: Product) => ele._id === item.productId
-                  );
-
-                  if (!product || !product.productImages || product.productImages.length === 0) {
-                    return null; // Skip rendering if product or images are undefined
-                  }
-
+                {/* for each OrderItem in order */}
+                {order.orderItems.map((item: OrderItem) => {
+                  const product: Product = order.productData.filter(
+                    (ele: Product) => item.productId === ele._id
+                  )[0];
                   const imagePath = `${serverApi}/${product.productImages[0]}`;
+
                   return (
-                    <Box key={order._id} className="orders-name-price">
-                      <img
-                        src="/img/kebab-fresh.webp"
-                        className="order-dish-img"
-                      />
-                      <p className="title-dish">{product.productName}</p>
-                      <Box className="price-box">
+                    <Box key={item._id} className="orders-name-price">
+                      <Stack className="order-dish-class">
+                        <img
+                          src={imagePath}
+                          className="order-dish-img"
+                          alt=""
+                        />
+                        <p className="title-dish">{product.productName}</p>
+                      </Stack>
+                      <Stack className="price-box">
                         <p>${item.itemPrice}</p>
-                        <img src="/icons/close.svg" />
-                        <p>{item.itemQuantity}</p>
-                        <img src="/icons/pause.svg" />
-                      </Box>
-                      <p style={{ marginLeft: '15px' }}>${item.itemQuantity * item.itemPrice}</p>
+                        <img src="/icons/close.svg" alt="" />
+                        <p>${item.itemQuantity}</p>
+                        <img src="/icons/pause.svg" alt="" />$
+                        {item.itemPrice * item.itemQuantity}
+                      </Stack>
                     </Box>
                   );
                 })}
-                 <Box className="total-price-box">
+              </Box>
+
+              <Box className="total-price-box">
                 <Box className="box-total">
-                    <p>Product price</p>
-                    <p>${order.orderTotal + order.orderDelivery}</p>
-                    <img src="/icons/plus.svg" style={{ marginLeft: "5px" }} />
-                    <p>Delivery cost</p>
-                    <p>${order.orderDelivery}</p>
-                    <img src="/icons/pause.svg" style={{ marginLeft: "5px" }} />
-                    <p>Total</p>
-                </Box>
-                <p>${order.orderTotal}</p>
+                  <p>Product price</p>
+                  <p>${order.orderTotal - order.orderDelivery}</p>
+                  <img
+                    src="/icons/plus.svg"
+                    style={{ marginLeft: "20px" }}
+                    alt=""
+                  />
+                  <p> Delivery cost</p>
+                  <p>${order.orderDelivery}</p>
+                  <img
+                    src="/icons/pause.svg"
+                    style={{ marginLeft: "20px" }}
+                    alt=""
+                  />
+                  <p>Total</p>
+                  <p>${order.orderTotal}</p>
                 </Box>
               </Box>
             </Box>
           );
         })}
-       
 
-        {!finishedOrders || (finishedOrders.length === 0 && (
-          <Box display="flex" flexDirection="row" justifyContent="center">
-            <img
-              src="/icons/noimage-list.svg"
-              style={{ width: 300, height: 300 }}
-            />
-          </Box>
-        ))}
+        {!finishedOrders ||
+          (finishedOrders.length <= 0 && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"center"}
+            >
+              <img
+                src="/icons/noimage-list.svg"
+                style={{ width: 300, height: 300 }}
+                alt=""
+              />
+            </Box>
+          ))}
       </Stack>
     </TabPanel>
   );

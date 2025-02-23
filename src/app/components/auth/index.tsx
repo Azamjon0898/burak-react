@@ -9,9 +9,9 @@ import LoginIcon from "@mui/icons-material/Login";
 import { T } from "../../../lib/types/common";
 import { Messages } from "../../../lib/config";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
-import MemberService from "../../services/MemberService";
+import MemberService from "../../services/MemberService.ts";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../hooks/useGlobals.ts";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -46,84 +46,88 @@ interface AuthenticationModalProps {
 export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
   const classes = useStyles();
-  const [memberNick, setMemberNick] = useState<string>("");
-  const [memberPhone, setMemberPhone] = useState<string>("");
-  const [memberPassword, setMemberPassword] = useState<string>("");
-  const {setAuthMember} = useGlobals();
+  const [memberNick, setMemberNick] = useState("");
+  const [memberPhone, setMemberPhone] = useState("");
+  const [memberPassword, setMemberPassword] = useState("");
+  const { setAuthMember } = useGlobals();
 
   /** HANDLERS **/
 
-const handleUsername = (e: T) => {
-      setMemberNick(e.target.value)
+  const handleUsername = (e: T) => {
+    setMemberNick(e.target.value);
+  };
+  const handlePhone = (e: T) => {
+    setMemberPhone(e.target.value);
+  };
+  const handlePassword = (e: T) => {
+    setMemberPassword(e.target.value);
   };
 
-const handlePhone = (e: T) => {
-    setMemberPhone(e.target.value)
-};
-
-const handlePassword = (e: T) => {
-    setMemberPassword(e.target.value)
-}; 
-
-const handlePasswordKeyDown = (e:T) => {
-  if (e.key === "Enter" && signupOpen) {
-    handleSignUpRequest().then();
-  } else if (e.key === "Enter" && loginOpen) {
-    handleLoginRequest().then();
-  }
-}
-
-
-const handleSignUpRequest = async () => {
-  try{
-
-    const isFullFill = memberNick !== "" && memberPhone !== "" && memberPassword !== "" ;
-    if(!isFullFill) throw new Error(Messages.error3)
-
-    const signUpInput : MemberInput = {
-      memberNick: memberNick,
-      memberPhone: memberPhone,
-      memberPassword: memberPassword
+  // signup when pressed "enter" key
+  const handlePasswordKeyDown = (e: T) => {
+    // signup
+    if (e.key === "Enter" && signupOpen) {
+      handleSignupRequest().then();
     }
-    const member = new MemberService();
-    const result = await member.signup(signUpInput);
+    // login
+    else if (e.key === "Enter" && loginOpen) {
+      handleLoginRequest().then();
+    }
+  };
 
-    // Saving Authenticated user
-    setAuthMember(result)
-    handleSignupClose();
-  }
-  catch(err) {
-    console.log(err);
-    handleSignupClose();
-    sweetErrorHandling(err).then();
-  }
-}
+  // signup request
+  const handleSignupRequest = async () => {
+    try {
+      const isFulFill =
+        memberNick !== "" && memberPhone !== "" && memberPassword !== "";
 
-const handleLoginRequest = async () => {
-  try {
-    const isFulfill = memberNick !== "" && memberPassword !== "";
-    if (!isFulfill) throw new Error(Messages.error3);
+      if (!isFulFill) throw new Error(Messages.error3);
 
-    const loginInput: LoginInput = {
-      memberNick: memberNick,
-      memberPassword: memberPassword,
-    };
+      const signupInput: MemberInput = {
+        memberNick: memberNick,
+        memberPhone: memberPhone,
+        memberPassword: memberPassword,
+      };
 
-    const member = new MemberService();
-    const result = await member.login(loginInput);
+      const member = new MemberService();
+      const result = await member.signup(signupInput);
 
-    // Saving Authenticated user
-    setAuthMember(result); 
-    handleLoginClose();
-  } catch (err) {
-    console.log(err);
-    handleLoginClose();
-    sweetErrorHandling(err).then();
-  }
-};
+      // Saving Authenticated User
+      setAuthMember(result);
+      handleSignupClose();
+    } catch (err) {
+      console.log("fashdiah", err);
+      handleSignupClose();
+      sweetErrorHandling(err).then();
+    }
+  };
+
+  const handleLoginRequest = async () => {
+    try {
+      const isFulFill = memberNick !== "" && memberPassword !== "";
+      if (!isFulFill) throw new Error(Messages.error3);
+
+      const loginInput: LoginInput = {
+        memberNick: memberNick,
+        memberPassword: memberPassword,
+      };
+
+      const member = new MemberService();
+      const result = await member.login(loginInput);
+
+      // Saving Authenticated User
+      setAuthMember(result);
+      handleLoginClose();
+    } catch (err) {
+      console.log("fashdiah", err);
+      handleLoginClose();
+      sweetErrorHandling(err).then();
+    }
+  };
 
   return (
     <div>
+      {/* signup modal */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -170,7 +174,7 @@ const handleLoginRequest = async () => {
                 sx={{ marginTop: "30px", width: "120px" }}
                 variant="extended"
                 color="primary"
-                onClick={handleSignUpRequest}
+                onClick={handleSignupRequest} // () => handleSignupRequest()
               >
                 <LoginIcon sx={{ mr: 1 }} />
                 Signup
@@ -180,6 +184,7 @@ const handleLoginRequest = async () => {
         </Fade>
       </Modal>
 
+      {/* login modal */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -216,7 +221,7 @@ const handleLoginRequest = async () => {
               />
               <TextField
                 id={"outlined-basic"}
-                label={"password"} 
+                label={"password"}
                 variant={"outlined"}
                 type={"password"}
                 onChange={handlePassword}
@@ -227,7 +232,6 @@ const handleLoginRequest = async () => {
                 variant={"extended"}
                 color={"primary"}
                 onClick={handleLoginRequest}
-                
               >
                 <LoginIcon sx={{ mr: 1 }} />
                 Login

@@ -5,15 +5,17 @@ interface GlobalInterface {
   authMember: Member | null;
   setAuthMember: (member: Member | null) => void;
   orderBuilder: Date;
-  setOrderBuilder: (input: Date) => void;
+  setOrderBuilder: (date: Date) => void;
 }
 
-export const GlobalContext = createContext<GlobalInterface | undefined>(undefined);
+export const GlobalContext = createContext<GlobalInterface | undefined>(
+  undefined
+);
 
 export const useGlobals = () => {
   const context = useContext(GlobalContext);
-
-  if (context === undefined) throw new Error("useGlobals without Provider");
-
+  if (context === undefined) {
+    throw new Error("useGlobals within a Provider");
+  }
   return context;
 };
